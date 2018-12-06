@@ -19,24 +19,24 @@
         };
 
         function connect() {
-        wsHost = "ws://" + window.location.host + "/websocket";
-        websocket = new WebSocket(wsHost);
-        websocket.onopen = function(evt) { onOpen(evt) }; 
-        websocket.onclose = function(evt) { onClose(evt) }; 
-        websocket.onmessage = function(evt) { onMessage(evt) }; 
-        websocket.onerror = function(evt) { onError(evt) }; 
-      }; 
-
-      function onOpen(evt) { 
-        jQuery('#roomContainer').fadeIn('slow');
-      };  
-
-      function onClose(evt) { 
-        jQuery('#roomContainer').fadeOut('slow');
-        showAlert('<span style="color: red;">Websocket connection has been closed!</span>');
-      };  
-
-      function onMessage(evt) { 
+          wsHost = "ws://" + window.location.host + "/websocket";
+          websocket = new WebSocket(wsHost);
+          websocket.onopen = function(evt) { onOpen(evt) }; 
+          websocket.onclose = function(evt) { onClose(evt) }; 
+          websocket.onmessage = function(evt) { onMessage(evt) }; 
+          websocket.onerror = function(evt) { onError(evt) };
+        }; 
+        
+        function onOpen(evt) { 
+          jQuery('#roomContainer').fadeIn('slow');
+        };  
+        
+        function onClose(evt) { 
+          jQuery('#roomContainer').fadeOut('slow');
+          showAlert('<span style="color: red;">Websocket connection has been closed!</span>');
+        };  
+        
+        function onMessage(evt) { 
         showMessage(jQuery.parseJSON(evt.data));
       };  
 
@@ -50,12 +50,16 @@
           websocket.send(txt);
           jQuery("#textToSend").val("");
         } else {
-           showAlert('<span style="color: red;">ERROR: websocket is not ready</span>');
+            showAlert('<span style="color: red;">ERROR: websocket is not ready</span>');
         };
       };
 
       function showMessage(data) {
-        jQuery('#chatContainer').append('<div>' + data.sender + ' -> ' + data.msg + '</div>');
+        if (data.msg === "masuk" || data.msg === "keluar") {
+          jQuery('#chatContainer').append('<div>' + data.sender + ' ' + data.msg + '</div>');
+        } else {
+          jQuery('#chatContainer').append('<div>' + data.sender + ' : ' + data.msg + '</div>');
+        }
       };
 
       function showAlert(txt) {
@@ -65,7 +69,7 @@
       </script>
       <style>
         #chatContainer {
-          background-color:lightgray;
+          background-color:lightblue;
           min-width: 300px;
           min-height: 200px;
         }
